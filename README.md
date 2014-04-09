@@ -1,6 +1,6 @@
 # MiniBufExpl with spaces
 
-This is fork where buffers names are separeted by spaces, instead of brackets [].
+This is a fork where buffers names are separeted by spaces, instead of brackets [].
 It gives me easier to find look. And in my opinion it's  more elegant.
 
 # MiniBufExpl
