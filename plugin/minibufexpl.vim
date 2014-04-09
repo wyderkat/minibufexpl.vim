@@ -533,12 +533,12 @@ endfunction
 function! <SID>RenderSyntax()
   if has("syntax")
     syn clear
-    syn match MBENormal                   ' [^ ]* '
-    syn match MBEChanged                  ' [^ ]* +'
-    syn match MBEVisibleNormal            ' [^ ]* \*'
-    syn match MBEVisibleChanged           ' [^ ]* \*+'
-    syn match MBEVisibleActiveNormal      ' [^ ]* \*!'
-    syn match MBEVisibleActiveChanged     ' [^ ]* \*+!'
+    syn match MBENormal                   ' [^ ]* #\?'
+    syn match MBEChanged                  ' [^ ]* +#\?'
+    syn match MBEVisibleNormal            ' [^ ]* \*#\?'
+    syn match MBEVisibleChanged           ' [^ ]* \*+#\?'
+    syn match MBEVisibleActiveNormal      ' [^ ]* \*!#\?'
+    syn match MBEVisibleActiveChanged     ' [^ ]* \*+!#\?'
 
     "MiniBufExpl Color Examples
     " hi MBENormal               guifg=#808080 guibg=fg
@@ -1536,6 +1536,11 @@ function! <SID>BuildBufferList(curBufNum)
         if(l:i == l:CurBufNum)
             let l:tab .= '!'
         endif
+
+        if stridx(s:bufUniqNameDict[l:i], expand('#:t')) != -1
+            let l:tab .= '#'
+        endif
+
 
         let l:maxTabWidth = strlen(l:tab) > l:maxTabWidth ? strlen(l:tab) : l:maxTabWidth
 
