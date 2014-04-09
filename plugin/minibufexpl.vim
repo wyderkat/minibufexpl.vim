@@ -533,12 +533,12 @@ endfunction
 function! <SID>RenderSyntax()
   if has("syntax")
     syn clear
-    syn match MBENormal                   '\[[^\]]*\]'
-    syn match MBEChanged                  '\[[^\]]*\]+'
-    syn match MBEVisibleNormal            '\[[^\]]*\]\*'
-    syn match MBEVisibleChanged           '\[[^\]]*\]\*+'
-    syn match MBEVisibleActiveNormal      '\[[^\]]*\]\*!'
-    syn match MBEVisibleActiveChanged     '\[[^\]]*\]\*+!'
+    syn match MBENormal                   ' [^ ]* '
+    syn match MBEChanged                  ' [^ ]* +'
+    syn match MBEVisibleNormal            ' [^ ]* \*'
+    syn match MBEVisibleChanged           ' [^ ]* \*+'
+    syn match MBEVisibleActiveNormal      ' [^ ]* \*!'
+    syn match MBEVisibleActiveChanged     ' [^ ]* \*+!'
 
     "MiniBufExpl Color Examples
     " hi MBENormal               guifg=#808080 guibg=fg
@@ -680,15 +680,15 @@ function! <SID>StartExplorer(curBufNum)
   " names in the [MBE] window it also saves the last-pattern
   " and restores it.
   if !g:miniBufExplShowBufNumbers
-    nnoremap <buffer> l       :call search('\[[^\]]*\]')<CR>:<BS>
-    nnoremap <buffer> h       :call search('\[[^\]]*\]','b')<CR>:<BS>
-    nnoremap <buffer> <right> :call search('\[[^\]]*\]')<CR>:<BS>
-    nnoremap <buffer> <left>  :call search('\[[^\]]*\]','b')<CR>:<BS>
+    nnoremap <buffer> l       :call search(' [^ ]* ')<CR>:<BS>
+    nnoremap <buffer> h       :call search(' [^ ]* ','b')<CR>:<BS>
+    nnoremap <buffer> <right> :call search(' [^ ]* ')<CR>:<BS>
+    nnoremap <buffer> <left>  :call search(' [^ ]* ','b')<CR>:<BS>
   else
-    nnoremap <buffer> l       :call search('\[[0-9]*:[^\]]*\]')<CR>:<BS>
-    nnoremap <buffer> h       :call search('\[[0-9]*:[^\]]*\]','b')<CR>:<BS>
-    nnoremap <buffer> <right> :call search('\[[0-9]*:[^\]]*\]')<CR>:<BS>
-    nnoremap <buffer> <left>  :call search('\[[0-9]*:[^\]]*\]','b')<CR>:<BS>
+    nnoremap <buffer> l       :call search(' [0-9]*:[^ ]* ')<CR>:<BS>
+    nnoremap <buffer> h       :call search(' [0-9]*:[^ ]* ','b')<CR>:<BS>
+    nnoremap <buffer> <right> :call search(' [0-9]*:[^ ]* ')<CR>:<BS>
+    nnoremap <buffer> <left>  :call search(' [0-9]*:[^ ]* ','b')<CR>:<BS>
   endif
 
   " Attempt to perform single click mapping
@@ -1095,9 +1095,9 @@ function! <SID>DisplayBuffers(curBufNum)
   " Place cursor at current buffer in MBE
   if !<SID>IsBufferIgnored(a:curBufNum)
     if !g:miniBufExplShowBufNumbers
-      call search('\V['.s:bufUniqNameDict[a:curBufNum].']', 'w')
+      call search('\V '.s:bufUniqNameDict[a:curBufNum].' ', 'w')
     else
-      call search('\V['.a:curBufNum.':'.s:bufUniqNameDict[a:curBufNum].']', 'w')
+      call search('\V '.a:curBufNum.':'.s:bufUniqNameDict[a:curBufNum].' ', 'w')
     endif
   endif
 
@@ -1371,7 +1371,7 @@ function! <SID>DeleteBuffer(action,bang,...)
     endif
 
     let l:bufName = bufname(l:bufNum)
-    call <SID>DEBUG('Buffer to be deleted is <'.l:bufName.'>['.l:bufNum.']',5)
+    call <SID>DEBUG('Buffer to be deleted is <'.l:bufName.'> '.l:bufNum.' ',5)
 
     " Don't want auto updates while we are processing a delete
     " request.
@@ -1514,12 +1514,12 @@ function! <SID>BuildBufferList(curBufNum)
 
         " Establish the tab's content, including the differentiating root
         " dir if neccessary
-        let l:tab = '['
+        let l:tab = ' '
         if g:miniBufExplShowBufNumbers == 1
             let l:tab .= l:i.':'
         endif
         let l:tab .= s:bufUniqNameDict[l:i]
-        let l:tab .= ']'
+        let l:tab .= ' '
 
         " If the buffer is open in a window mark it
         if bufwinnr(l:i) != -1
@@ -1587,6 +1587,7 @@ function! <SID>CreateBufferUniqName(bufNum)
     let l:bufName = expand( "#" . l:bufNum . ":p:t")
     " Remove []'s & ()'s, these chars are preserved for buffer name locating
     let l:bufName = substitute(l:bufName, '[][()]', '', 'g')
+    let l:bufName = substitute(l:bufName, ' ', '_', 'g')
 
     " Create a unique name for unamed buffer
     if empty(l:bufName)
@@ -2129,7 +2130,7 @@ endfunction
 "
 function! <SID>GetActiveBuffer()
   call <SID>DEBUG('Entering GetActiveBuffer()',10)
-  let l:bufNum = substitute(s:miniBufExplBufList,'\[\([0-9]*\):[^\]]*\][^\!]*!', '\1', '') + 0
+  let l:bufNum = substitute(s:miniBufExplBufList,' \([0-9]*\):[^ ]* [^\!]*!', '\1', '') + 0
   call <SID>DEBUG('Currently active buffer is '.l:bufNum,10)
   call <SID>DEBUG('Leaving GetActiveBuffer()',10)
   return l:bufNum
@@ -2158,7 +2159,7 @@ function! <SID>GetSelectedBuffer()
 
   let l:save_reg = @"
   let @" = ""
-  normal ""yi[
+  normal ""yiW
   if @" != ""
     if !g:miniBufExplShowBufNumbers
       " This is a bit ugly, but it works, unless we come up with a

@@ -1,3 +1,8 @@
+# MiniBufExpl with spaces
+
+This is fork where buffers names are separeted by spaces, instead of brackets [].
+It gives me easier to find look. And in my opinion it's  more elegant.
+
 # MiniBufExpl
 
 This is a fork of [Bindu Wavell][]'s [MiniBufExpl][] plugin for [Vim][].
