@@ -1597,7 +1597,7 @@ function! <SID>CreateBufferUniqName(bufNum)
     " Create a unique name for unamed buffer
     if empty(l:bufName)
         call <SID>DEBUG('Leaving CreateBufferUniqName()',10)
-        return '--NO NAME--'.localtime()
+        return '--NO_NAME--'.localtime()
     endif
 
     let l:bufPathPrefix = ""
@@ -1654,7 +1654,7 @@ function! <SID>UpdateBufferNameDict(bufNum,deleted)
 
     " Identify buffers with no name
     if empty(l:bufName)
-        let l:bufName = '--NO NAME--'
+        let l:bufName = '--NO_NAME--'
     endif
 
     " Remove a deleted buffer from the buffer name dictionary
@@ -1694,7 +1694,7 @@ function! <SID>UpdateBufferPathDict(bufNum,deleted)
 
     " Identify buffers with no name
     if empty(l:bufName)
-        let l:bufName = '--NO NAME--'
+        let l:bufName = '--NO_NAME--'
     endif
 
     " Remove a deleted buffer from the buffer path dictionary
@@ -1843,7 +1843,7 @@ function! <SID>BuildBufferFinalDict(arg,deleted)
 
         " Identify buffers with no name
         if empty(l:bufName)
-            let l:bufName = '--NO NAME--'
+            let l:bufName = '--NO_NAME--'
         endif
 
         if(!has_key(s:bufNameDict, l:bufName))
